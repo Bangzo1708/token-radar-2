@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Token Radar — Pre-Token Protocol Launch Radar</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="dot" aria-hidden="true"></span><h1>TOKEN RADAR</h1><span class="tag">PRE-TOKEN LAUNCH RADAR</span></div>
+  <p class="sub">Which protocol with no token yet is worth farming next — ranked by what its launch would be worth, with the steps to farm it.</p>
+  <p class="meta" id="metaLine">Loading snapshot…</p>
+</header>
+
+<section class="kpis" id="kpis" aria-label="Board summary"></section>
+
+<section class="model" aria-label="How the value model works">
+  <h2>How the implied value is built</h2>
+  <p class="formula">implied value = TVL × category FDV/TVL multiple × growth factor × breadth factor × launch probability × 7% airdrop share</p>
+  <p>The multiple is the median market-cap/TVL of the token-bearing protocols in the same category, taken from this very snapshot — the snapshot's own trading protocols calibrate it, no name is hardcoded. Launch probability rises with how long a protocol has run with no token (0.25 fresh → 0.70 mature). Growth is the 7-day TVL change, capped so one wild week cannot dominate. Every row below says “records no token”, never “has none”: the snapshot is DefiLlama’s record, not proof.</p>
+</section>
+
+<section class="controls" aria-label="Board controls">
+  <input id="q" type="search" placeholder="Search protocol or category…" aria-label="Search protocols">
+  <select id="cat" aria-label="Filter by category"><option value="">All categories</option></select>
+  <select id="chain" aria-label="Filter by chain"><option value="">All chains</option></select>
+  <select id="scope" aria-label="Filter by scope">
+    <option value="all">All ranked</option>
+    <option value="watchlist">Watchlist only (40)</option>
+    <option value="below">Below the floor</option>
+  </select>
+  <select id="sort" aria-label="Sort board">
+    <option value="value">Sort: implied value ↓</option>
+    <option value="tvl">Sort: TVL ↓</option>
+    <option value="growth">Sort: 7-day growth ↓</option>
+    <option value="age">Sort: longest with no token ↓</option>
+    <option value="density">Sort: value per $1k TVL ↓</option>
+    <option value="name">Sort: name A–Z</option>
+  </select>
+  <button id="reset" type="button">Reset</button>
+</section>
+<p class="count" id="countLine"></p>
+
+<main>
+  <table id="board">
+    <thead><tr>
+      <th>#</th><th>Protocol</th><th>Category</th><th>Chains</th>
+      <th class="num">TVL</th><th class="num">7d</th><th class="num">Age</th>
+      <th class="num">Implied value</th><th class="num">$/ $1k TVL</th><th>List</th>
+    </tr></thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <section class="detail" id="detail" hidden aria-label="Protocol detail"></section>
+
+  <section class="comparables" aria-label="Token-bearing comparables">
+    <h2>Separating what already trades from what is still to come</h2>
+    <p>The board above holds only protocols that record no token. The multiples it uses are calibrated on protocols whose token already trades — the ten largest by market cap are below, with the FDV/TVL multiple each one implies. A high multiple here lifts every pre-token protocol in that category; a low one holds them down.</p>
+    <table id="compTable">
+      <thead><tr><th>Protocol (token trading)</th><th>Category</th><th class="num">TVL</th><th class="num">Market cap</th><th class="num">FDV/TVL</th></tr></thead>
+      <tbody id="compRows"></tbody>
+    </table>
+  </section>
+
+  <section class="method" aria-label="Method and limits">
+    <h2>Method &amp; limits</h2>
+    <ul>
+      <li>Board: every genuine pre-token protocol in the snapshot — the full 40-protocol watchlist (TVL ≥ $50M, no token recorded, not a wrapped, staked or bridged product) plus 158 further pre-token protocols the watchlist leaves out, filtered by the same rule the watchlist uses: no token recorded, not a wrapped, staked or bridged product, not a versioned release, not an exchange product. Bridges, CEX desks and liquid-staking wrappers are left out on purpose: they will never launch a token of their own.</li>
+      <li>Implied value is this entry’s own claim, never make.fun’s. It does not predict whether or when a token launches.</li>
+      <li>Farm plans are generic by category and chain, priced with per-chain gas hints; check the protocol’s own docs before moving funds.</li>
+      <li>Snapshot: DefiLlama protocols API, fetched 2026-11-14. The program re-derives everything from the snapshot file, so a future snapshot re-ranks the board on its own.</li>
+    </ul>
+  </section>
+</main>
+
+<footer><p>Token Radar — a program plus the dashboard it writes. Data: DefiLlama snapshot 2026-11-14. Implied values are model claims, not prices.</p></footer>
+<script src="../data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
